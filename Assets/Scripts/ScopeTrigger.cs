@@ -13,7 +13,11 @@ public class ScopeTrigger : MonoBehaviour
     private GameObject childPref = null;
     [SerializeField]
     private float increment = 2f;
-    private CircleCollider2D collider = null;
+    private new CircleCollider2D collider = null;
+    [SerializeField]
+    private Transform LightTrans = null;
+    [SerializeField]
+    private int MaxRadius = 16;
 
     // Start is called before the first frame update
     void Start()
@@ -32,8 +36,11 @@ public class ScopeTrigger : MonoBehaviour
         GameObject obj = Instantiate(childPref, children);
         Vector2 v = UnityEngine.Random.insideUnitCircle * (transform.localScale * collider.radius - radius);
         obj.transform.localPosition = v;
-        Vector3 newScale = new Vector3(transform.localScale.x + increment, transform.localScale.y + increment, transform.localScale.z);
+        if (transform.localScale.x >= MaxRadius) return;
+        Vector3 newScale = new Vector3(transform.localScale.x + increment, transform.localScale.y + increment, transform.localScale.z);      
         transform.localScale = newScale;
+        newScale = new Vector3(LightTrans.localScale.x, LightTrans.localScale.y + 0.1f * increment, LightTrans.localScale.z);
+        LightTrans.localScale = newScale;
     }
 
     public void Shrink()
@@ -42,6 +49,8 @@ public class ScopeTrigger : MonoBehaviour
         Destroy(children.GetChild(UnityEngine.Random.Range(0, children.childCount)).gameObject);
         Vector3 newScale = new Vector3(transform.localScale.x - increment, transform.localScale.y - increment, transform.localScale.z);
         transform.localScale = newScale;
+        newScale = new Vector3(LightTrans.localScale.x, LightTrans.localScale.y - 0.1f * increment, LightTrans.localScale.z);
+        LightTrans.localScale = newScale;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -52,7 +61,31 @@ public class ScopeTrigger : MonoBehaviour
             {
                 Expand(collision.transform.localScale * collision.GetComponent<CircleCollider2D>().radius);
                 Destroy(collision.gameObject);//吸收
+                //向GM发送数据
+                AddScore();
             }
+        }
+    }
+
+    private void AddScore()
+    {
+        if(GameMode.Insatance.isBattle)
+        {           
+            if(gameObject.layer.Equals(LayerMask.NameToLayer("Group1")))
+            {
+                BattleGameManager.Instance.NumOfPlayer1++;
+                BattleGameManager.Instance.NumOfGroup1--;
+            }
+            else
+            {
+                BattleGameManager.Instance.NumOfPlayer2++;
+                BattleGameManager.Instance.NumOfGroup2--;
+            }
+        }
+        else
+        {
+            SingleGameManager.Instance.NumOfPlayer1++;
+            SingleGameManager.Instance.TimeIncrease();
         }
     }
 }

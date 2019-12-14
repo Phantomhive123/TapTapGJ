@@ -6,7 +6,7 @@ public class SpriteTrigger : MonoBehaviour
 {
     [SerializeField]
     private bool mainPlayer = true;
-    private CircleCollider2D collider = null;
+    private new CircleCollider2D collider = null;
 
     private void Start()
     {

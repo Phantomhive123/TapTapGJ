@@ -10,10 +10,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     protected float rotateFacter = 1;
     [SerializeField]
-    private float radiusOfSight = 0f;
-    [SerializeField][Range(1,5)]
-    private float lengthLightTimes = 2f;
-    [SerializeField]
     protected float horizontalLimit = 15f;
     [SerializeField]
     protected float verticalLimit = 15f;
@@ -25,9 +21,7 @@ public class PlayerController : MonoBehaviour
     protected bool KButton = false;
 
     [SerializeField]
-    protected Transform light = null;
-    [SerializeField]
-    private Transform children = null;
+    protected new Transform light = null;
 
     private void Start()
     {
@@ -65,13 +59,13 @@ public class PlayerController : MonoBehaviour
 
     protected void CheckBound()
     {
-        if (transform.position.x >= verticalLimit && h > 0)
+        if (transform.position.x >= horizontalLimit && h > 0)
             h = 0;
-        else if (transform.position.x <= -verticalLimit && h < 0)
+        else if (transform.position.x <= -horizontalLimit && h < 0)
             h = 0;
-        if (transform.position.y >= horizontalLimit && v > 0)
+        if (transform.position.y >= verticalLimit && v > 0)
             v = 0;
-        else if (transform.position.y <= -horizontalLimit && v < 0)
+        else if (transform.position.y <= -verticalLimit && v < 0)
             v = 0;
     }
 }

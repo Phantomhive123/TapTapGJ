@@ -11,19 +11,29 @@ public class BattleGameManager : MonoBehaviour
         get { return instance; }
     }
 
-    public Text player1Score;
-    public Text player2Score;
-    public Text sprite1Group;
-    public Text sprite2Group;
+    //public Text player1Score;
+    //public Text player2Score;
+    public Image sprite1Group;
+    public Image sprite2Group;
+
+    private int SpriteMaxNum = 0;
 
     [SerializeField]
-    private PlayerController player1;
+    private Transform group1 = null;
     [SerializeField]
-    private PlayerController player2;
+    private Transform group2 = null;
+    //[SerializeField]
+    //private Text resultText = null;
     [SerializeField]
-    private Transform group1;
+    private GameObject mask = null;
+
     [SerializeField]
-    private Transform group2;
+    private Sprite[] sprites = null;
+
+    [SerializeField]
+    private Image player1Result;
+    [SerializeField]
+    private Image player2Result;
 
     private int numOfPlayer1 = 1;
     public int NumOfPlayer1
@@ -32,7 +42,12 @@ public class BattleGameManager : MonoBehaviour
         set
         {
             numOfPlayer1 = value;
-            player1Score.text = "Score:" + numOfPlayer1.ToString();
+            if (numOfPlayer1 == 0)
+            {
+                if (mask.activeSelf) return;
+                mask.SetActive(true);
+                SetResult(-1);
+            }
         }
     }
     private int numOfPlayer2 = 1;
@@ -42,18 +57,26 @@ public class BattleGameManager : MonoBehaviour
         set
         {
             numOfPlayer2 = value;
-            player2Score.text = "Score:" + numOfPlayer2.ToString();
+            if (numOfPlayer2 == 0)
+            {
+                if (mask.activeSelf) return;
+                mask.SetActive(true);
+                SetResult(1);
+                //resultText.text = "玩家1获胜！";
+            }
+            //player2Score.text = "Score:" + numOfPlayer2.ToString();
         }
     }
 
     private int numOfGroup1 = 20;
     public int NumOfGroup1
     {
-        get { return NumOfGroup1; }
+        get { return numOfGroup1; }
         set
         {
             numOfGroup1 = value;
-            sprite1Group.text = numOfGroup1.ToString();
+            //sprite1Group.text = numOfGroup1.ToString();
+            sprite1Group.fillAmount = (float)numOfGroup1 / SpriteMaxNum;
             if (numOfGroup1 == 0 && numOfGroup2 == 0)
                 CheckWinner();
         }
@@ -65,7 +88,8 @@ public class BattleGameManager : MonoBehaviour
         set
         {
             numOfGroup2 = value;
-            sprite2Group.text = numOfGroup2.ToString();
+            //sprite2Group.text = numOfGroup2.ToString();
+            sprite2Group.fillAmount = (float)numOfGroup2 / SpriteMaxNum;
             if (numOfGroup1 == 0 && numOfGroup2 == 0)
                 CheckWinner();
         }
@@ -79,6 +103,7 @@ public class BattleGameManager : MonoBehaviour
         else
             DestroyImmediate(gameObject);
 
+        SpriteMaxNum = group1.childCount;
         NumOfGroup1 = group1.childCount;
         NumOfGroup2 = group2.childCount;
     }
@@ -86,10 +111,37 @@ public class BattleGameManager : MonoBehaviour
     private void CheckWinner()
     {
         if (numOfPlayer1 > numOfPlayer2)
-            Debug.Log("player1 wins！");
+            SetResult(1);
         else if (numOfPlayer1 < numOfPlayer2)
-            Debug.Log("player2 wins！");
+            SetResult(2);
         else
-            Debug.Log("both win!");
+            SetResult(0);
+    }
+
+    /// <summary>
+    /// i=0平局，+1玩家一获胜，-1玩家二获胜
+    /// </summary>
+    /// <param name="i"></param>
+    private void SetResult(int i)
+    {
+        //if (mask.activeSelf) return;
+        mask.SetActive(true);
+        player1Result.gameObject.SetActive(true);
+        player2Result.gameObject.SetActive(true);
+        switch (i)
+        {
+            case 0:
+                player1Result.overrideSprite = sprites[0];
+                player2Result.overrideSprite = sprites[0];
+                return;
+            case 1:
+                player1Result.overrideSprite = sprites[2];
+                player2Result.overrideSprite = sprites[1];
+                return;
+            case -1:
+                player1Result.overrideSprite = sprites[1];
+                player2Result.overrideSprite = sprites[2];
+                return;
+        }
     }
 }

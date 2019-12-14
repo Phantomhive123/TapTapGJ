@@ -66,10 +66,13 @@ public class Enemy : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Player"))
         {
+            GetComponent<CircleCollider2D>().enabled = false;
             ScopeTrigger player = collision.GetComponentInParent<ScopeTrigger>();
             player.Shrink();
+            SendEnemyAttackData(collision);
             anim.Play(Animator.StringToHash("Break"));
             enabled = false;//播放破碎动画
+            Debug.Log("Attack");
             return;
         }
         if (collision.gameObject.CompareTag("Sprite"))
@@ -78,6 +81,7 @@ public class Enemy : MonoBehaviour
             if (spriteAnimController)
                 collision.GetComponent<SpriteAnimController>().PlayDestroyAnim();
             anim.Play(Animator.StringToHash("Break"));
+            EnemyAttackSprite(collision);
             enabled = false;
             return;
         }
@@ -107,5 +111,43 @@ public class Enemy : MonoBehaviour
     private void AnimDestroy()
     {
         Destroy(gameObject);
+    }
+
+    private void SendEnemyAttackData(Collider2D collision)
+    {
+        if(GameMode.Insatance.isBattle)
+        {
+            if(collision.gameObject.layer.Equals(LayerMask.NameToLayer("Group1")))
+            {
+                BattleGameManager.Instance.NumOfPlayer1--;
+            }
+            else
+            {
+                BattleGameManager.Instance.NumOfPlayer2--;
+            }
+        }
+        else
+        {
+            SingleGameManager.Instance.NumOfPlayer1--;
+        }
+    }
+
+    private void EnemyAttackSprite(Collider2D collision)
+    {
+        if (GameMode.Insatance.isBattle)
+        {
+            if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Group1")))
+            {
+                BattleGameManager.Instance.NumOfGroup1--;
+            }
+            else
+            {
+                BattleGameManager.Instance.NumOfGroup2--;
+            }
+        }
+        else
+        {
+
+        }
     }
 }
