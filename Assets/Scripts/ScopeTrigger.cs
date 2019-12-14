@@ -43,4 +43,16 @@ public class ScopeTrigger : MonoBehaviour
         Vector3 newScale = new Vector3(transform.localScale.x - increment, transform.localScale.y - increment, transform.localScale.z);
         transform.localScale = newScale;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Sprite"))
+        {
+            if (collision.gameObject.layer == gameObject.layer)
+            {
+                Expand(collision.transform.localScale * collision.GetComponent<CircleCollider2D>().radius);
+                Destroy(collision.gameObject);
+            }
+        }
+    }
 }

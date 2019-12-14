@@ -21,10 +21,9 @@ public class PlayerController : MonoBehaviour
     protected bool KButton = false;
 
     [SerializeField]
-    protected Transform Scope = null;
+    protected Transform Light = null;
     [SerializeField]
     private Transform Children = null;
-
 
     private void Start()
     {
@@ -32,6 +31,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
+
     void Update()
     {
         Move();
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
         if (JButton ^ KButton)
         {
             Vector3 euler = JButton ? Vector3.forward : Vector3.back;
-            Scope.Rotate(euler * RotateFacter);
+            Light.Rotate(euler * RotateFacter);
         }
     }
 }

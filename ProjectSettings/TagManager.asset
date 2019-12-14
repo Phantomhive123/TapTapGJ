@@ -9,6 +9,7 @@ TagManager:
   - Light
   - Player2
   - Player1
+  - PlayerView
   layers:
   - Default
   - TransparentFX

@@ -20,7 +20,7 @@ public class Player2 : PlayerController
         if (JButton ^ KButton)
         {
             Vector3 euler = JButton ? Vector3.forward : Vector3.back;
-            Scope.Rotate(euler * RotateFacter);
+            Light.Rotate(euler * RotateFacter);
         }
     }
 }
