@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleGameManager : MonoBehaviour
 {
@@ -10,10 +11,19 @@ public class BattleGameManager : MonoBehaviour
         get { return instance; }
     }
 
+    public Text player1Score;
+    public Text player2Score;
+    public Text sprite1Group;
+    public Text sprite2Group;
+
     [SerializeField]
     private PlayerController player1;
     [SerializeField]
     private PlayerController player2;
+    [SerializeField]
+    private Transform group1;
+    [SerializeField]
+    private Transform group2;
 
     private int numOfPlayer1 = 1;
     public int NumOfPlayer1
@@ -22,6 +32,7 @@ public class BattleGameManager : MonoBehaviour
         set
         {
             numOfPlayer1 = value;
+            player1Score.text = "Score:" + numOfPlayer1.ToString();
         }
     }
     private int numOfPlayer2 = 1;
@@ -31,6 +42,7 @@ public class BattleGameManager : MonoBehaviour
         set
         {
             numOfPlayer2 = value;
+            player2Score.text = "Score:" + numOfPlayer2.ToString();
         }
     }
 
@@ -41,6 +53,7 @@ public class BattleGameManager : MonoBehaviour
         set
         {
             numOfGroup1 = value;
+            sprite1Group.text = numOfGroup1.ToString();
             if (numOfGroup1 == 0 && numOfGroup2 == 0)
                 CheckWinner();
         }
@@ -52,6 +65,7 @@ public class BattleGameManager : MonoBehaviour
         set
         {
             numOfGroup2 = value;
+            sprite2Group.text = numOfGroup2.ToString();
             if (numOfGroup1 == 0 && numOfGroup2 == 0)
                 CheckWinner();
         }
@@ -64,17 +78,18 @@ public class BattleGameManager : MonoBehaviour
             instance = this;
         else
             DestroyImmediate(gameObject);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        NumOfGroup1 = group1.childCount;
+        NumOfGroup2 = group2.childCount;
     }
 
     private void CheckWinner()
     {
-
+        if (numOfPlayer1 > numOfPlayer2)
+            Debug.Log("player1 wins！");
+        else if (numOfPlayer1 < numOfPlayer2)
+            Debug.Log("player2 wins！");
+        else
+            Debug.Log("both win!");
     }
-    
 }
