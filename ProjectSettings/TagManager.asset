@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Sprite
+  - Enemy
+  - Light
   layers:
   - Default
   - TransparentFX
@@ -40,4 +43,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BG
+    uniqueID: 1959743911
+    locked: 0
+  - name: Zero
+    uniqueID: 293972053
+    locked: 0
+  - name: Light
+    uniqueID: 3248646079
+    locked: 0
+  - name: Player
+    uniqueID: 2768889595
     locked: 0

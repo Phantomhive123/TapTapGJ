@@ -6,22 +6,22 @@ using System;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private float MoveFacter = 1;
+    protected float MoveFacter = 1;
     [SerializeField]
-    private float RotateFacter = 1;
+    protected float RotateFacter = 1;
     [SerializeField]
     private float RadiusOfSight = 0f;
     [SerializeField][Range(1,5)]
     private float LengthLightTimes = 2f;
 
-    private float h = 0f;
-    private float v = 0f;
+    protected float h = 0f;
+    protected float v = 0f;
     private new Transform transform;
-    private bool JButton = false;
-    private bool KButton = false;
+    protected bool JButton = false;
+    protected bool KButton = false;
 
     [SerializeField]
-    private Transform Scope = null;
+    protected Transform Scope = null;
     [SerializeField]
     private Transform Children = null;
 
@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
         transform = GetComponent<Transform>();
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -39,7 +38,7 @@ public class PlayerController : MonoBehaviour
         Rotate();
     }
 
-    private void Move()
+    protected virtual void Move()
     {
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
@@ -47,7 +46,7 @@ public class PlayerController : MonoBehaviour
         transform.Translate(new Vector3(h, v, 0) * MoveFacter * Time.deltaTime);
     }
 
-    private void Rotate()
+    protected virtual void Rotate()
     {
         JButton = Input.GetKey(KeyCode.J);
         KButton = Input.GetKey(KeyCode.K);

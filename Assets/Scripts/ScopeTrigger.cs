@@ -27,21 +27,20 @@ public class ScopeTrigger : MonoBehaviour
         transform.localScale = ScaleOfScope;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Expand(Vector3 radius)
     {
-        CircleCollider2D other = collision.gameObject.GetComponent<CircleCollider2D>();
-        //判断是黑球还是白球
         GameObject obj = Instantiate(childPref, Children);
-        Vector2 v = UnityEngine.Random.insideUnitCircle * (transform.localScale * collider.radius - other.radius * other.transform.localScale);
+        Vector2 v = UnityEngine.Random.insideUnitCircle * (transform.localScale * collider.radius - radius);
         obj.transform.localPosition = v;
-        Destroy(other.gameObject);
-        //扩展
-        Expand();
+        Vector3 newScale = new Vector3(transform.localScale.x + increment, transform.localScale.y + increment, transform.localScale.z);
+        transform.localScale = newScale;
     }
 
-    private void Expand()
+    public void Shrink()
     {
-        Vector3 newScale = new Vector3(transform.localScale.x + increment, transform.localScale.y + increment, transform.localScale.z);
+        if (Children.childCount == 1) return;//死亡
+        Destroy(Children.GetChild(UnityEngine.Random.Range(0, Children.childCount)).gameObject);
+        Vector3 newScale = new Vector3(transform.localScale.x - increment, transform.localScale.y - increment, transform.localScale.z);
         transform.localScale = newScale;
     }
 }
