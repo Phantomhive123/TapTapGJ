@@ -13,19 +13,40 @@ public class Enemy : MonoBehaviour
     private Transform LightOrigin = null;
     private Transform MovingTarget = null;
 
+    private Animator anim;
+
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
+
     private void Update()
     {
         if (InLight)
         {
             Vector3 direction = (transform.position - LightOrigin.position).normalized;
             transform.Translate(direction * Time.deltaTime * PushScale);
-            return;
         }
-
-        if(MovingToward)
+        else if(MovingToward)
         {
             Vector3 direction = (MovingTarget.position - transform.position).normalized;
             transform.Translate(direction * Time.deltaTime * MoveScale);
+        }
+
+        if (!InLight && !MovingToward)
+        {
+            if (!CurrentAnimTheSame("Idle"))
+                anim.Play(Animator.StringToHash("Idle"));
+        }
+        else if (InLight) 
+        {
+            if (!CurrentAnimTheSame("Push"))
+                anim.Play(Animator.StringToHash("Push"));
+        }
+        else if(MovingToward)
+        {
+            if (!CurrentAnimTheSame("MoveToward"))
+                anim.Play(Animator.StringToHash("MoveToward"));
         }
     }
 
@@ -47,42 +68,41 @@ public class Enemy : MonoBehaviour
         {
             ScopeTrigger player = collision.GetComponentInParent<ScopeTrigger>();
             player.Shrink();
-            Destroy(gameObject);
+            anim.Play(Animator.StringToHash("Break"));
+            enabled = false;//播放破碎动画
             return;
         }
         if (collision.gameObject.CompareTag("Sprite"))
         {
             Destroy(collision.gameObject);
-            Destroy(gameObject);
+            anim.Play(Animator.StringToHash("Break"));
+            enabled = false;
             return;
         }
     }
 
-    /*
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Light"))
-        {
-            Transform otherTrans = other.transform.parent.transform;
-            Vector3 direction = (transform.position - otherTrans.position).normalized;
-            //Vector3 direction = (otherTrans.localPosition - transform.localPosition).normalized;
-            transform.Translate(direction * Time.deltaTime * SpeedScale);     
-        }
-    }*/
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Light")) 
         {
             LightOrigin = null;
             InLight = false;
-            return;
         }
-        if(collision.gameObject.CompareTag("PlayerView"))
+        else if(collision.gameObject.CompareTag("PlayerView"))
         {
             if (collision.gameObject != MovingTarget.gameObject) return;
             MovingTarget = null;
             MovingToward = false;
-            return;
         }
+    }
+
+    private bool CurrentAnimTheSame(string name)
+    {
+        return anim.GetCurrentAnimatorClipInfo(0)[0].clip.name == name;
+    }
+
+    private void AnimDestroy()
+    {
+        Destroy(gameObject);
     }
 }
