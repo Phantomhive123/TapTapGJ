@@ -6,13 +6,17 @@ using System;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    protected float MoveFacter = 1;
+    protected float moveFacter = 1;
     [SerializeField]
-    protected float RotateFacter = 1;
+    protected float rotateFacter = 1;
     [SerializeField]
-    private float RadiusOfSight = 0f;
+    private float radiusOfSight = 0f;
     [SerializeField][Range(1,5)]
-    private float LengthLightTimes = 2f;
+    private float lengthLightTimes = 2f;
+    [SerializeField]
+    protected float horizontalLimit = 15f;
+    [SerializeField]
+    protected float verticalLimit = 15f;
 
     protected float h = 0f;
     protected float v = 0f;
@@ -21,9 +25,9 @@ public class PlayerController : MonoBehaviour
     protected bool KButton = false;
 
     [SerializeField]
-    protected Transform Light = null;
+    protected Transform light = null;
     [SerializeField]
-    private Transform Children = null;
+    private Transform children = null;
 
     private void Start()
     {
@@ -43,7 +47,8 @@ public class PlayerController : MonoBehaviour
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
 
-        transform.Translate(new Vector3(h, v, 0) * MoveFacter * Time.deltaTime);
+        CheckBound();
+        transform.Translate(new Vector3(h, v, 0) * moveFacter * Time.deltaTime);
     }
 
     protected virtual void Rotate()
@@ -54,7 +59,19 @@ public class PlayerController : MonoBehaviour
         if (JButton ^ KButton)
         {
             Vector3 euler = JButton ? Vector3.forward : Vector3.back;
-            Light.Rotate(euler * RotateFacter);
+            light.Rotate(euler * rotateFacter);
         }
+    }
+
+    protected void CheckBound()
+    {
+        if (transform.position.x >= verticalLimit && h > 0)
+            h = 0;
+        else if (transform.position.x <= -verticalLimit && h < 0)
+            h = 0;
+        if (transform.position.y >= horizontalLimit && v > 0)
+            v = 0;
+        else if (transform.position.y <= -horizontalLimit && v < 0)
+            v = 0;
     }
 }

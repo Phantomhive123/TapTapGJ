@@ -9,7 +9,8 @@ public class Player2 : PlayerController
         h = Input.GetAxis("Horizontal2");
         v = Input.GetAxis("Vertical2");
 
-        transform.Translate(new Vector3(h, v, 0) * MoveFacter * Time.deltaTime);
+        CheckBound();
+        transform.Translate(new Vector3(h, v, 0) * moveFacter * Time.deltaTime);
     }
 
     protected override void Rotate()
@@ -20,7 +21,7 @@ public class Player2 : PlayerController
         if (JButton ^ KButton)
         {
             Vector3 euler = JButton ? Vector3.forward : Vector3.back;
-            Light.Rotate(euler * RotateFacter);
+            light.Rotate(euler * rotateFacter);
         }
     }
 }
