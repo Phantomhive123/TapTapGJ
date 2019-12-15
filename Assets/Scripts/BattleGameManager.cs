@@ -17,6 +17,7 @@ public class BattleGameManager : MonoBehaviour
     public Image sprite2Group;
 
     private int SpriteMaxNum = 0;
+    private bool endFlag = false;
 
     [SerializeField]
     private Transform group1 = null;
@@ -25,7 +26,7 @@ public class BattleGameManager : MonoBehaviour
     //[SerializeField]
     //private Text resultText = null;
     [SerializeField]
-    private GameObject mask = null;
+    private Animator mask = null;
 
     [SerializeField]
     private Sprite[] sprites = null;
@@ -43,9 +44,7 @@ public class BattleGameManager : MonoBehaviour
         {
             numOfPlayer1 = value;
             if (numOfPlayer1 == 0)
-            {
-                if (mask.activeSelf) return;
-                mask.SetActive(true);
+            {               
                 SetResult(-1);
             }
         }
@@ -59,8 +58,6 @@ public class BattleGameManager : MonoBehaviour
             numOfPlayer2 = value;
             if (numOfPlayer2 == 0)
             {
-                if (mask.activeSelf) return;
-                mask.SetActive(true);
                 SetResult(1);
                 //resultText.text = "玩家1获胜！";
             }
@@ -124,8 +121,9 @@ public class BattleGameManager : MonoBehaviour
     /// <param name="i"></param>
     private void SetResult(int i)
     {
-        //if (mask.activeSelf) return;
-        mask.SetActive(true);
+        if (endFlag) return;
+        endFlag = true;
+        mask.Play(Animator.StringToHash("FadeOut"));
         player1Result.gameObject.SetActive(true);
         player2Result.gameObject.SetActive(true);
         switch (i)
