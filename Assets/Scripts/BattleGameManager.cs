@@ -35,6 +35,8 @@ public class BattleGameManager : MonoBehaviour
     private Image player1Result;
     [SerializeField]
     private Image player2Result;
+    [SerializeField]
+    private GameObject note;
 
     private int numOfPlayer1 = 1;
     public int NumOfPlayer1
@@ -126,6 +128,7 @@ public class BattleGameManager : MonoBehaviour
         mask.Play(Animator.StringToHash("FadeOut"));
         player1Result.gameObject.SetActive(true);
         player2Result.gameObject.SetActive(true);
+        note.SetActive(true);
         switch (i)
         {
             case 0:

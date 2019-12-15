@@ -18,12 +18,22 @@ public class SingleGameManager : MonoBehaviour
     [SerializeField]
     private float timeIncrement = 3;
 
-    [SerializeField]
-    private Text resultText = null;
+    //[SerializeField]
+    //private Text resultText = null;
     [SerializeField]
     private GameObject resultPanel = null;
     [SerializeField]
     private Slider timeSlider = null;
+
+    [SerializeField]
+    private Image result = null;
+    [SerializeField]
+    private Animator mask = null;
+    [SerializeField]
+    private GameObject note = null;
+
+    public Sprite win;
+    public Sprite lose;
 
     private int numOfPlayer1 = 1;
     public int NumOfPlayer1
@@ -34,9 +44,12 @@ public class SingleGameManager : MonoBehaviour
             numOfPlayer1 = value;
             if (numOfPlayer1 == 0)
             {
-                if (resultPanel.activeSelf) return;
-                resultPanel.SetActive(true);
-                resultText.text = "游戏失败！";
+                if (result.gameObject.activeSelf) return;
+                mask.Play(Animator.StringToHash("FadeOut"));
+                result.gameObject.SetActive(true);
+                result.overrideSprite = lose;
+                note.SetActive(true);
+                //resultText.text = "游戏失败！";
                 StopAllCoroutines();
             }
             //player1Score.text = "Score:" + numOfPlayer1.ToString();
@@ -64,8 +77,10 @@ public class SingleGameManager : MonoBehaviour
             timeSlider.value = time / totalTime;
             time -= Time.fixedDeltaTime;
         }
-        resultPanel.SetActive(true);
-        resultText.text = "通关得分：" + NumOfPlayer1;
+        mask.Play(Animator.StringToHash("FadeOut"));
+        result.gameObject.SetActive(true);
+        result.overrideSprite = win;
+        note.SetActive(true);
     }
 
     public void TimeIncrease()

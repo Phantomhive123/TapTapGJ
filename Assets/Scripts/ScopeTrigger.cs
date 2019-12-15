@@ -46,7 +46,7 @@ public class ScopeTrigger : MonoBehaviour
     public void Shrink()
     {
         if (children.childCount == 1) return;//死亡
-        Destroy(children.GetChild(UnityEngine.Random.Range(0, children.childCount)).gameObject);
+        Destroy(children.GetChild(UnityEngine.Random.Range(1, children.childCount)).gameObject);
         Vector3 newScale = new Vector3(transform.localScale.x - increment, transform.localScale.y - increment, transform.localScale.z);
         transform.localScale = newScale;
         newScale = new Vector3(LightTrans.localScale.x, LightTrans.localScale.y - 0.1f * increment, LightTrans.localScale.z);

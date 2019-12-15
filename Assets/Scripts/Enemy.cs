@@ -60,6 +60,7 @@ public class Enemy : MonoBehaviour
         }
         if(collision.gameObject.CompareTag("PlayerView"))
         {
+            SoundManager.Instance.PlayPatchingSound();
             movingToward = true;
             movingTarget = collision.transform;
             return;
@@ -72,7 +73,7 @@ public class Enemy : MonoBehaviour
             SendEnemyAttackData(collision);
             anim.Play(Animator.StringToHash("Break"));
             enabled = false;//播放破碎动画
-            Debug.Log("Attack");
+            SoundManager.Instance.PlayAttachSound();
             return;
         }
         if (collision.gameObject.CompareTag("Sprite"))

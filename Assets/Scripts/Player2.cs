@@ -15,8 +15,8 @@ public class Player2 : PlayerController
 
     protected override void Rotate()
     {
-        JButton = Input.GetKey(KeyCode.RightControl);
-        KButton = Input.GetKey(KeyCode.RightShift);
+        JButton = Input.GetKey(KeyCode.Keypad4);
+        KButton = Input.GetKey(KeyCode.Keypad5);
 
         if (JButton ^ KButton)
         {
